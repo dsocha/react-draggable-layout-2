@@ -2,7 +2,7 @@ import Styles from './DraggableLayout.styles';
 import React, { useEffect, useState } from 'react';
 import Draggable from './Draggable';
 
-const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
+const DraggableLayout = ({ components, columns, mainColumnIndex, isDarkMode }) => {
   const [columnsComponents, setColumnsComponents] = useState(null);
   const [draggingElement, setDraggingElement] = useState(false);
 
@@ -19,7 +19,7 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
     }
 
     setColumnsComponents(result);
-  }, [columns, mainColumnIndex]);
+  }, [columns, mainColumnIndex, components]);
 
   // useEffect(() => {
   //   // console.log('columnsComponents', columnsComponents);
@@ -73,12 +73,13 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
     // <create placeholder element>
     let placeholder = document.createElement('div');
     placeholder.id = 'draggable-layout-placeholder';
+    placeholder.classList.add('draggable-layout-placeholder');
     placeholder.classList.add('draggable-layout-blinking');
     placeholder.style.position = 'relative';
     placeholder.style.width = '100%';
     placeholder.style.height = height;
     placeholder.style.borderRadius = borderRadius;
-    placeholder.style.backgroundColor = '#88888833';
+    placeholder.style.backgroundColor = isDarkMode ? '#ffffff44' : '#00000022';
     return placeholder;
     // </create placeholder element>
   };
@@ -91,9 +92,9 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
     if (!placeholder) return;
     const placeholderParent = placeholder.parentElement;
     if (!placeholderParent) return;
+    // </remove placeholder>
     placeholderParent.insertBefore(document.getElementById(e.id), placeholder);
     placeholderParent.removeChild(placeholder);
-    // </remove placeholder>
     setDraggingElement(null);
   };
 
