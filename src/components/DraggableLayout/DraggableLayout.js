@@ -82,7 +82,9 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
     if (!placeholder) return;
     const placeholderParent = placeholder.parentElement;
     if (!placeholderParent) return;
+    placeholderParent.insertBefore(document.getElementById(e.id), placeholder);
     placeholderParent.removeChild(placeholder);
+
     setDraggingElement(null);
   };
 
