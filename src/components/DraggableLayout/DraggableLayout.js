@@ -4,7 +4,7 @@ import Draggable from './Draggable';
 
 const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
   const [columnsComponents, setColumnsComponents] = useState(null);
-  const [draggingElementId, setDraggingElementId] = useState(false);
+  const [draggingElement, setDraggingElement] = useState(false);
 
   useEffect(() => {
     const result = [];
@@ -24,17 +24,37 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
   //   // console.log('columnsComponents', columnsComponents);
   // }, [columnsComponents]);
 
-  const handleGlobalMouseMove = (e) => {
-    if (!draggingElementId) return;
+  const handleGlobalMouseMove = async (e) => {
+    if (!draggingElement) return;
     const { clientX, clientY } = e;
     const elements = document.elementsFromPoint(clientX, clientY);
-    const mouseOverElement = elements.find((e) => e.classList.contains('draggable-layout-draggable') && e.id !== draggingElementId);
+
+    // <determine mouse over element>
+    const mouseOverElement = elements.find((e) => e.classList.contains('draggable-layout-draggable') && e.id !== draggingElement.id);
     if (!mouseOverElement) return;
     const rect = mouseOverElement.getBoundingClientRect();
     const mouseOverBottomElement = clientY - rect.y > rect.height / 2;
     console.log('dragging over', 'id:', mouseOverElement.id, 'bottom:', mouseOverBottomElement);
+    // </determine mouse over element>
 
-    //     console.log('mouseOverElement:', mouseOverElement);
+    // <remove placeholder from old position>
+    const placeholder = document.getElementById('draggable-layout-placeholder');
+    if (placeholder) {
+      const placeholderParent = placeholder.parentElement;
+      if (placeholderParent) placeholderParent.removeChild(placeholder);
+    }
+    // </remove placeholder from old position>
+
+    // <insert placeholder in new position>
+    const mouseOverElementParent = mouseOverElement.parentElement;
+
+    const newPlaceholder = getPlaceHolder(draggingElement.height, draggingElement.borderRadius);
+    if (mouseOverBottomElement) {
+      mouseOverElementParent.insertBefore(newPlaceholder, mouseOverElement.nextSibling);
+    } else {
+      mouseOverElementParent.insertBefore(newPlaceholder, mouseOverElement);
+    }
+    // </insert placeholder in new position>
   };
 
   const handleOnDragStart = async (e) => {
@@ -42,7 +62,7 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
     const elementParent = document.getElementById(e.id).parentElement;
     const placeholder = getPlaceHolder(e.height, e.borderRadius);
     elementParent.insertBefore(placeholder, element);
-    setDraggingElementId(e.id);
+    setDraggingElement(e);
   };
 
   const getPlaceHolder = (height, borderRadius) => {
@@ -53,22 +73,17 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
     placeholder.style.height = height;
     placeholder.style.borderRadius = borderRadius;
     placeholder.style.backgroundColor = '#88888888';
-    placeholder.onmouseenter = (e) => {
-      console.log('placeholder.onmouseenter(), e:', e);
-      placeholder.style.backgroundColor = '#bb888844';
-    };
-    placeholder.onmouseleave = (e) => {
-      console.log('placeholder.onmouseleave(), e:', e);
-      placeholder.style.backgroundColor = '#11888888';
-    };
     return placeholder;
   };
 
   const handleOnDragEnd = async (e) => {
-    const elementParent = document.getElementById(e.id).parentNode;
+    // const elementParent = document.getElementById(e.id).parentNode;
     const placeholder = document.getElementById('draggable-layout-placeholder');
-    elementParent.removeChild(placeholder);
-    setDraggingElementId(null);
+    if (!placeholder) return;
+    const placeholderParent = placeholder.parentElement;
+    if (!placeholderParent) return;
+    placeholderParent.removeChild(placeholder);
+    setDraggingElement(null);
   };
 
   const getComponentsForColumn = (col) => {
