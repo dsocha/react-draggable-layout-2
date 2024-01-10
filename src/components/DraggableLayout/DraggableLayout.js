@@ -13,6 +13,7 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
       result.push(
         <div className={i.toString() === mainColumnIndex?.toString() ? 'draggable-layout-column-master' : 'draggable-layout-column-regular'} key={id} id={id}>
           {getComponentsForColumn(i)}
+          {getLastElementInColumn()}
         </div>
       );
     }
@@ -30,7 +31,7 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
     const elements = document.elementsFromPoint(clientX, clientY);
 
     // <determine mouse over element>
-    const mouseOverElement = elements.find((e) => e.classList.contains('draggable-layout-draggable') && e.id !== draggingElement.id);
+    const mouseOverElement = elements.find((e) => e.classList.contains('draggable-layout-droppable') && e.id !== draggingElement.id);
     if (!mouseOverElement) return;
     const rect = mouseOverElement.getBoundingClientRect();
     const mouseOverBottomElement = clientY - rect.y > rect.height / 2;
@@ -47,9 +48,10 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
 
     // <insert placeholder in new position>
     const mouseOverElementParent = mouseOverElement.parentElement;
+    const isLastElement = mouseOverElement.className?.includes('draggable-layout-last-element') ? true : false;
 
     const newPlaceholder = getPlaceHolder(draggingElement.height, draggingElement.borderRadius);
-    if (mouseOverBottomElement) {
+    if (!isLastElement && mouseOverBottomElement) {
       mouseOverElementParent.insertBefore(newPlaceholder, mouseOverElement.nextSibling);
     } else {
       mouseOverElementParent.insertBefore(newPlaceholder, mouseOverElement);
@@ -58,33 +60,40 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
   };
 
   const handleOnDragStart = async (e) => {
+    // <insert placeholder>
     const element = document.getElementById(e.id);
     const elementParent = document.getElementById(e.id).parentElement;
     const placeholder = getPlaceHolder(e.height, e.borderRadius);
     elementParent.insertBefore(placeholder, element);
     setDraggingElement(e);
+    // </insert placeholder>
   };
 
   const getPlaceHolder = (height, borderRadius) => {
+    // <create placeholder element>
     let placeholder = document.createElement('div');
     placeholder.id = 'draggable-layout-placeholder';
+    placeholder.classList.add('draggable-layout-blinking');
     placeholder.style.position = 'relative';
     placeholder.style.width = '100%';
     placeholder.style.height = height;
     placeholder.style.borderRadius = borderRadius;
-    placeholder.style.backgroundColor = '#88888888';
+    placeholder.style.backgroundColor = '#88888833';
     return placeholder;
+    // </create placeholder element>
   };
 
+  const getLastElementInColumn = () => <div className='draggable-layout-droppable draggable-layout-last-element' isLastElement={true} style={{ flex: 'auto', height: '100px', width: '100%' }}></div>;
+
   const handleOnDragEnd = async (e) => {
-    // const elementParent = document.getElementById(e.id).parentNode;
+    // <remove placeholder>
     const placeholder = document.getElementById('draggable-layout-placeholder');
     if (!placeholder) return;
     const placeholderParent = placeholder.parentElement;
     if (!placeholderParent) return;
     placeholderParent.insertBefore(document.getElementById(e.id), placeholder);
     placeholderParent.removeChild(placeholder);
-
+    // </remove placeholder>
     setDraggingElement(null);
   };
 

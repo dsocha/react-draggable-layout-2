@@ -56,7 +56,7 @@ const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
   };
 
   return (
-    <div style={isDragging ? { zIndex: 99999, opacity: 0.9, position: 'absolute', width: width, height: height, left: left, top: top } : null} key={id} id={id} tabIndex={0} className='draggable-layout-draggable' onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
+    <div style={isDragging ? { zIndex: 99999, transform: 'scale(0.95)', opacity: 0.9, position: 'absolute', width: width, height: height, left: left, top: top } : null} key={id} id={id} tabIndex={0} className='draggable-layout-droppable' onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
       {children}
     </div>
   );

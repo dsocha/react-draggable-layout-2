@@ -13,25 +13,12 @@ const Styles = styled.div`
     gap: 4px;
   }
 
-  /* .draggable-layout-dragging-element {
-    animation: draggable-layout-dragging-element-anim 0.2s ease-in-out forwards;
-  }
-
-  @keyframes draggable-layout-dragging-element-anim {
-    0% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0.5;
-    }
-  } */
-
   div.draggable-layout-column-regular {
     display: flex;
     flex-direction: column;
     flex: 1;
     width: 100%;
-    gap: 4px;
+    gap: 12px;
     padding: 8px;
   }
 
@@ -40,10 +27,10 @@ const Styles = styled.div`
     flex-direction: column;
     flex: 2;
     width: 100%;
-    gap: 4px;
+    gap: 12px;
     padding: 8px;
   }
-  /* 
+
   .draggable-layout-blinking {
     animation: draggable-layout-blinking-anim 0.4s linear infinite;
   }
@@ -54,46 +41,12 @@ const Styles = styled.div`
     }
   }
 
-  .draggable-layout-droppable-transition {
-    animation: draggable-layout-droppable-transition-anim 0.2s ease-in-out;
-  }
-
-  @keyframes draggable-layout-droppable-transition-anim {
-    from {
-      transform: scaleY(0);
-    }
-    to {
-      transform: scaleY(1);
-    }
-  }
-
-  .draggable-layout-draggable-transition {
-    animation: draggable-layout-draggable-transition-anim 0.2s ease-in-out;
-  }
-
-  @keyframes draggable-layout-draggable-transition-anim {
-    from {
-      transform: scaleY(0);
-    }
-    to {
-      transform: scaleY(1);
-    }
-  }
-     */
-
   @media screen and (max-width: 1023px) {
     div.draggable-layout-container {
       display: flex;
       flex-direction: column;
     }
   }
-
-  /* @media screen and (min-width: 1024px) and (max-width: 1535px) {
-    div.draggable-layout-container {
-      display: flex;
-      flex-direction: row;
-    }
-  } */
 
   @media screen and (min-width: 1024px) {
     div.draggable-layout-container {
