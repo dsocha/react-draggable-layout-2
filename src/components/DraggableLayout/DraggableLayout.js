@@ -7,7 +7,6 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
   const [draggingElementId, setDraggingElementId] = useState(false);
 
   useEffect(() => {
-    let key = 0;
     const result = [];
     for (let i = 0; i < columns; i++) {
       const id = self.crypto.randomUUID();
@@ -27,14 +26,18 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
 
   const handleGlobalMouseMove = (e) => {
     if (!draggingElementId) return;
-    const { pageX, pageY } = e;
-    const elements = document.elementsFromPoint(pageX, pageY);
-    const draggableElement = elements.find((e) => e.classList.contains('draggable-layout-draggable') && e.id !== draggingElementId);
-    console.log('elements:', draggableElement);
+    const { clientX, clientY } = e;
+    const elements = document.elementsFromPoint(clientX, clientY);
+    const mouseOverElement = elements.find((e) => e.classList.contains('draggable-layout-draggable') && e.id !== draggingElementId);
+    if (!mouseOverElement) return;
+    const rect = mouseOverElement.getBoundingClientRect();
+    const mouseOverBottomElement = clientY - rect.y > rect.height / 2;
+    console.log('dragging over', 'id:', mouseOverElement.id, 'bottom:', mouseOverBottomElement);
+
+    //     console.log('mouseOverElement:', mouseOverElement);
   };
 
   const handleOnDragStart = async (e) => {
-    // console.log('handleOnDragStart(), e:', e);
     const element = document.getElementById(e.id);
     const elementParent = document.getElementById(e.id).parentElement;
     const placeholder = getPlaceHolder(e.height, e.borderRadius);
@@ -43,7 +46,6 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
   };
 
   const getPlaceHolder = (height, borderRadius) => {
-    // console.log('getPlaceHolder()', height);
     let placeholder = document.createElement('div');
     placeholder.id = 'draggable-layout-placeholder';
     placeholder.style.position = 'relative';
@@ -63,7 +65,6 @@ const DraggableLayout = ({ components, columns, mainColumnIndex }) => {
   };
 
   const handleOnDragEnd = async (e) => {
-    //console.log('handleOnDragEnd(), e:', e);
     const elementParent = document.getElementById(e.id).parentNode;
     const placeholder = document.getElementById('draggable-layout-placeholder');
     elementParent.removeChild(placeholder);

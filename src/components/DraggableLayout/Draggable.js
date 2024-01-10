@@ -12,7 +12,7 @@ const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
   const onMouseDown = (e) => {
     //console.log('onMouseDown(), e:', e);
 
-    const { pageX, pageY } = e;
+    const { clientX, pageY } = e;
     const { offsetHeight, offsetWidth, offsetLeft, offsetTop } = e.target;
     const { borderRadius } = window.getComputedStyle(e.target);
 
@@ -22,11 +22,11 @@ const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
     // </set size>
 
     // <set dragging position>
-    const col = pageX - offsetLeft;
+    const col = clientX - offsetLeft;
     const cot = pageY - offsetTop;
     setCalclulatedOffsetLeft(col);
     setCalclulatedOffsetTop(cot);
-    setLeft(pageX - col);
+    setLeft(clientX - col);
     setTop(pageY - cot);
     // </set dragging position>
 
@@ -43,8 +43,8 @@ const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
 
   const onMouseMove = (e) => {
     if (!isDragging) return;
-    const { pageX, pageY } = e;
-    setLeft(pageX - calclulatedOffsetLeft);
+    const { clientX, pageY } = e;
+    setLeft(clientX - calclulatedOffsetLeft);
     setTop(pageY - calclulatedOffsetTop);
   };
 
