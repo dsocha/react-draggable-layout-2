@@ -49,14 +49,14 @@ const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
   };
 
   const onMouseLeave = (e) => {
-    // console.log('onMouseLeave(), e:', e);
+    //console.log('onMouseLeave(), e:', e);
     if (!isDragging) return;
     if (onDragEnd) onDragEnd({ id });
     setIsDragging(false);
   };
 
   return (
-    <div style={isDragging ? { zIndex: 99999, opacity: 0.9, position: 'absolute', width: width, height: height, left: left, top: top } : null} key={id} id={id} tabIndex={0} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
+    <div style={isDragging ? { zIndex: 99999, opacity: 0.9, position: 'absolute', width: width, height: height, left: left, top: top } : null} key={id} id={id} tabIndex={0} className='draggable-layout-draggable' onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
       {children}
     </div>
   );

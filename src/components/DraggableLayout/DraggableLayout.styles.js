@@ -13,7 +13,7 @@ const Styles = styled.div`
     gap: 4px;
   }
 
-  .draggable-layout-dragging-element {
+  /* .draggable-layout-dragging-element {
     animation: draggable-layout-dragging-element-anim 0.2s ease-in-out forwards;
   }
 
@@ -24,7 +24,7 @@ const Styles = styled.div`
     100% {
       opacity: 0.5;
     }
-  }
+  } */
 
   div.draggable-layout-column-regular {
     display: flex;
@@ -43,7 +43,7 @@ const Styles = styled.div`
     gap: 4px;
     padding: 8px;
   }
-
+  /* 
   .draggable-layout-blinking {
     animation: draggable-layout-blinking-anim 0.4s linear infinite;
   }
@@ -79,6 +79,7 @@ const Styles = styled.div`
       transform: scaleY(1);
     }
   }
+     */
 
   @media screen and (max-width: 1023px) {
     div.draggable-layout-container {
@@ -87,14 +88,14 @@ const Styles = styled.div`
     }
   }
 
-  @media screen and (min-width: 1024px) and (max-width: 1535px) {
+  /* @media screen and (min-width: 1024px) and (max-width: 1535px) {
     div.draggable-layout-container {
       display: flex;
       flex-direction: row;
     }
-  }
+  } */
 
-  @media screen and (min-width: 1536px) {
+  @media screen and (min-width: 1024px) {
     div.draggable-layout-container {
       display: flex;
       flex-direction: row;
