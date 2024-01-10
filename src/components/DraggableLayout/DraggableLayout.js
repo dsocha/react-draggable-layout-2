@@ -2,7 +2,7 @@ import Styles from './DraggableLayout.styles';
 import React, { useEffect, useState } from 'react';
 import Draggable from './Draggable';
 
-const DraggableLayout = ({ components, columns, mainColumnIndex, isDarkMode }) => {
+const DraggableLayout = ({ components, columns, mainColumnIndex, isDarkMode, draggable }) => {
   const [columnsComponents, setColumnsComponents] = useState(null);
   const [draggingElement, setDraggingElement] = useState(false);
 
@@ -104,7 +104,7 @@ const DraggableLayout = ({ components, columns, mainColumnIndex, isDarkMode }) =
     for (let i = 0; i < c.length; i++) {
       const id = self.crypto.randomUUID();
       result.push(
-        <Draggable key={id} id={id} draggable={true} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
+        <Draggable key={id} id={id} draggable={draggable} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
           {c[i]}
         </Draggable>
       );

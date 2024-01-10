@@ -10,7 +10,8 @@ const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
   const [calclulatedOffsetTop, setCalclulatedOffsetTop] = useState(0);
 
   const onMouseDown = (e) => {
-    //console.log('onMouseDown(), e:', e);
+    // console.log('onMouseDown(), e:', e);
+    if (e.button !== 0) return;
 
     const { clientX, pageY } = e;
     const { offsetHeight, offsetWidth, offsetLeft, offsetTop } = e.target;
@@ -36,6 +37,7 @@ const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
 
   const onMouseUp = (e) => {
     // console.log('onMouseUp(), e:', e);
+    if (e.button !== 0) return;
     if (!isDragging) return;
     if (onDragEnd) onDragEnd({ id });
     setIsDragging(false);
@@ -50,6 +52,7 @@ const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
 
   const onMouseLeave = (e) => {
     //console.log('onMouseLeave(), e:', e);
+    if (e.button !== 0) return;
     if (!isDragging) return;
     if (onDragEnd) onDragEnd({ id });
     setIsDragging(false);
