@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
+const Draggable = ({ id, children, onDragStart, onDragEnd, draggable }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
@@ -12,6 +12,7 @@ const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
   const onMouseDown = (e) => {
     // console.log('onMouseDown(), e:', e.target);
     if (e.button !== 0) return;
+    if (!draggable) return;
 
     // <get handle to the target component element>
     const { clientX, clientY } = e;
