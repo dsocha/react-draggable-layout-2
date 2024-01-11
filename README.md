@@ -49,7 +49,7 @@ export default function App() {
 
 ## Properties
 
-- **components**
+- **defaultComponents**
   - An array of components that you want to place into DraggableLayout. Each object must contain following props:
     - **id** - a unique id
     - **col** - an index of column where you want to place your component
