@@ -2,7 +2,7 @@ import Styles from './DraggableLayout.styles';
 import React, { useEffect, useState } from 'react';
 import Draggable from './Draggable';
 
-const DraggableLayout = ({ components, columns, mainColumnIndex, isDarkMode, draggable, onChange }) => {
+const DraggableLayout = ({ components, columns, mainColumnIndex, isDarkMode, draggable, onChange, hiddenIds = [] }) => {
   const [columnsComponents, setColumnsComponents] = useState(null);
   const [draggingElement, setDraggingElement] = useState(false);
   const [localComponents, setLocalComponents] = useState(components);
@@ -24,7 +24,26 @@ const DraggableLayout = ({ components, columns, mainColumnIndex, isDarkMode, dra
 
   useEffect(() => {
     if (onChange) onChange(localComponents);
+    handleHiddenIdsChange();
   }, [localComponents]);
+
+  useEffect(() => {
+    handleHiddenIdsChange();
+  }, [hiddenIds]);
+
+  const handleHiddenIdsChange = () => {
+    if (!hiddenIds) return;
+    const allNodes = document.getElementsByClassName('draggable-layout-droppable');
+    if (!allNodes) return;
+    for (let i = 0; i < allNodes.length; i++) {
+      const node = allNodes[i];
+      if (!node) continue;
+      if (node.classList.contains('draggable-layout-last-element')) continue;
+      const { id: componentId } = node;
+      if (!componentId) continue;
+      node.style.display = hiddenIds.includes(componentId) ? 'none' : null;
+    }
+  };
 
   const handleGlobalMouseMove = async (e) => {
     if (!draggingElement) return;
