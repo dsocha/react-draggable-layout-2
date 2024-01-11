@@ -10,12 +10,22 @@ const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
   const [calclulatedOffsetTop, setCalclulatedOffsetTop] = useState(0);
 
   const onMouseDown = (e) => {
-    // console.log('onMouseDown(), e:', e);
+    // console.log('onMouseDown(), e:', e.target);
     if (e.button !== 0) return;
 
-    const { clientX, pageY } = e;
-    const { offsetHeight, offsetWidth, offsetLeft, offsetTop } = e.target;
-    const { borderRadius } = window.getComputedStyle(e.target);
+    // <get handle to the target component element>
+    const { clientX, clientY } = e;
+    const elements = document.elementsFromPoint(clientX, clientY);
+    if (!elements) return;
+    const element = elements.find((e) => e.id === id);
+    if (!element) return;
+    const targetComponentElement = element.children[0];
+    // </get handle to the target component element>
+
+    // <prepare params>
+    const { offsetHeight, offsetWidth, offsetLeft, offsetTop } = targetComponentElement;
+    const { borderRadius } = window.getComputedStyle(targetComponentElement);
+    // </prepare params>
 
     // <set size>
     setHeight(offsetHeight);
@@ -24,11 +34,11 @@ const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
 
     // <set dragging position>
     const col = clientX - offsetLeft;
-    const cot = pageY - offsetTop;
+    const cot = clientY - offsetTop;
     setCalclulatedOffsetLeft(col);
     setCalclulatedOffsetTop(cot);
     setLeft(clientX - col);
-    setTop(pageY - cot);
+    setTop(clientY - cot);
     // </set dragging position>
 
     if (onDragStart) onDragStart({ id, height: `${offsetHeight}px`, width: `${offsetWidth}px`, borderRadius });
@@ -45,9 +55,9 @@ const Draggable = ({ id, children, onDragStart, onDragEnd }) => {
 
   const onMouseMove = (e) => {
     if (!isDragging) return;
-    const { clientX, pageY } = e;
+    const { clientX, clientY } = e;
     setLeft(clientX - calclulatedOffsetLeft);
-    setTop(pageY - calclulatedOffsetTop);
+    setTop(clientY - calclulatedOffsetTop);
   };
 
   const onMouseLeave = (e) => {
