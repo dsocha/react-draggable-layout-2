@@ -78,6 +78,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
   };
 
   const handleOnDragStart = async (e) => {
+    dropOtphanedPlaceholders();
     // <insert placeholder>
     const element = document.getElementById(e.id);
     const elementParent = document.getElementById(e.id).parentElement;
@@ -115,6 +116,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     // </move dragging element and remove placeholder>
     setDraggingElement(null);
     updateLocalComponents();
+    dropOtphanedPlaceholders();
   };
 
   const updateLocalComponents = () => {
@@ -149,6 +151,16 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
       );
     }
     return result;
+  };
+
+  const dropOtphanedPlaceholders = () => {
+    const placeholders = document.getElementsByClassName('draggable-layout-placeholder');
+    for (let i = 0; i < placeholders.length; i++) {
+      const placeholder = placeholders[i];
+      const placeholderParent = placeholder.parentElement;
+      if (!placeholderParent) continue;
+      placeholderParent.removeChild(placeholder);
+    }
   };
 
   return (
