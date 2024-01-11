@@ -2,13 +2,14 @@
 
 Put your React.js components into a draggable column layout.
 
+This is a new implementation of `react-draggable-layout`.
+
 ![alt text](screenshot.png)
 
 ## Pages
 
 - [npm](https://www.npmjs.com/package/react-draggable-layout-2)
 - [github](https://github.com/dsocha/react-draggable-layout-2)
-- [sandbox](https://codesandbox.io/p/sandbox/react-draggable-layout-2-2rn4zr)
 
 ## Install
 

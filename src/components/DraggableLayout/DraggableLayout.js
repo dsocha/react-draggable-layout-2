@@ -2,10 +2,10 @@ import Styles from './DraggableLayout.styles';
 import React, { useEffect, useState } from 'react';
 import Draggable from './Draggable';
 
-const DraggableLayout = ({ components, columns, mainColumnIndex, isDarkMode, draggable, onChange, hiddenIds = [] }) => {
+const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMode, onChange, hiddenIds = [] }) => {
   const [columnsComponents, setColumnsComponents] = useState(null);
   const [draggingElement, setDraggingElement] = useState(false);
-  const [localComponents, setLocalComponents] = useState(components);
+  const [localComponents, setLocalComponents] = useState(defaultComponents);
 
   useEffect(() => {
     const result = [];
@@ -19,8 +19,8 @@ const DraggableLayout = ({ components, columns, mainColumnIndex, isDarkMode, dra
       );
     }
     setColumnsComponents(result);
-    setLocalComponents([...components]);
-  }, [columns, mainColumnIndex, components]);
+    setLocalComponents([...defaultComponents]);
+  }, [columns, mainColumnIndex, defaultComponents]);
 
   useEffect(() => {
     if (onChange) onChange(localComponents);
@@ -139,11 +139,11 @@ const DraggableLayout = ({ components, columns, mainColumnIndex, isDarkMode, dra
 
   const getComponentsForColumn = (col) => {
     const result = [];
-    const c = components.filter((c) => c.col.toString() === col.toString());
+    const c = defaultComponents.filter((c) => c.col.toString() === col.toString());
     for (let i = 0; i < c.length; i++) {
       const id = c[i].id ?? self.crypto.randomUUID();
       result.push(
-        <Draggable key={id} id={id} draggable={draggable} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
+        <Draggable key={id} id={id} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
           {c[i].component}
         </Draggable>
       );
