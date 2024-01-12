@@ -56,17 +56,19 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, draggable }) => {
 
   const onMouseMove = (e) => {
     if (!isDragging) return;
-    const { clientX, clientY } = e;
-    setLeft(clientX - calclulatedOffsetLeft);
-    setTop(clientY - calclulatedOffsetTop);
+    const { clientX, clientY, movementX, movementY } = e;
+    setLeft(movementX + clientX - calclulatedOffsetLeft);
+    setTop(movementY + clientY - calclulatedOffsetTop);
   };
 
   const onMouseLeave = (e) => {
     //console.log('onMouseLeave(), e:', e);
     if (e.button !== 0) return;
     if (!isDragging) return;
-    if (onDragEnd) onDragEnd({ id });
-    setIsDragging(false);
+    const { clientX, clientY, movementX, movementY } = e;
+    console.log(e);
+    setLeft(movementX + clientX - calclulatedOffsetLeft);
+    setTop(movementY + clientY - calclulatedOffsetTop);
   };
 
   return (

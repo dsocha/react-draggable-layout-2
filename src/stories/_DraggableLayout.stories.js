@@ -36,7 +36,15 @@ Primary.args = {
       ),
     },
     { col: 0, id: 'Component 2', component: <div style={{ height: '180px', backgroundColor: 'rgb(153 246 228)', borderRadius: '1rem', padding: '24px', boxShadow: '0 8px 10px -4px #cccccc' }}>Component #2</div> },
-    { col: 1, id: 'Component 3', component: <div style={{ height: '300px', backgroundColor: 'rgb(254 202 202)', borderRadius: '1rem', padding: '24px', boxShadow: '0 8px 10px -4px #cccccc' }}>Component #3</div> },
+    {
+      col: 1,
+      id: 'Component 3',
+      component: (
+        <div style={{ height: '300px', backgroundColor: 'rgb(254 202 202)', borderRadius: '1rem', padding: '24px', boxShadow: '0 8px 10px -4px #cccccc' }}>
+          <img src='https://cdn-icons-png.flaticon.com/512/13881/13881945.png' style={{ height: '160px' }} />
+        </div>
+      ),
+    },
     { col: 1, id: 'Component 4', component: <div style={{ height: '250px', backgroundColor: 'rgb(191 219 254)', borderRadius: '1rem', padding: '24px', boxShadow: '0 8px 10px -4px #cccccc' }}>Component #4</div> },
     { col: 2, id: 'Component 5', component: <div style={{ height: '180px', backgroundColor: 'rgb(254 215 170)', borderRadius: '1rem', padding: '24px', boxShadow: '0 8px 10px -4px #cccccc' }}>Component #5</div> },
   ],

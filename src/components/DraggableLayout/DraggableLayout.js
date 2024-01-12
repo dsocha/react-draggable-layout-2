@@ -8,6 +8,11 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
   const [localComponents, setLocalComponents] = useState(defaultComponents);
 
   useEffect(() => {
+    window.ondragstart = draggable
+      ? function () {
+          return false;
+        }
+      : null;
     const result = [];
     for (let i = 0; i < columns; i++) {
       const id = `draggable-layout-column-${i}`;
