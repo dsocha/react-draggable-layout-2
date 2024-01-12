@@ -24,7 +24,7 @@ npm install --save react-draggable-layout-2
 ## Usage
 
 ```jsx
-import DraggableLayout from 'react-draggable-layout-2';
+import DraggableLayout2 from 'react-draggable-layout-2';
 
 export default function App() {
   const components = [
@@ -41,7 +41,7 @@ export default function App() {
 
   return (
     <div style={{ height: '100vh', backgroundColor: '#f4f4f4' }}>
-      <DraggableLayout components={components} columns={3} mainColumnIndex={1} onChange={handleOnChange} draggable={true} />
+      <DraggableLayout2 defaultComponents={components} columns={3} mainColumnIndex={1} onChange={handleOnChange} draggable={true} />
     </div>
   );
 }
@@ -62,3 +62,7 @@ export default function App() {
   - Index of the main column. The main column is wider than others.
 - **draggable**
   - Set false if you want to disable drag and drop.
+- **isDarkMode**
+  - A true/false flag that changes a placeholder styling.
+- **hiddenIds**
+  - An array of component IDs that you want to hide.
