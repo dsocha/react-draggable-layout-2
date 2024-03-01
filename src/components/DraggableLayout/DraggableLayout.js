@@ -24,19 +24,21 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
       );
     }
     setColumnsComponents(result);
-    setLocalComponents([...defaultComponents]);
+    //setLocalComponents([...defaultComponents]);
   }, [columns, mainColumnIndex, defaultComponents, draggable]);
 
   useEffect(() => {
     if (onChange) onChange(localComponents);
-    handleHiddenIdsChange();
+    handleHiddenIdsChange(true);
   }, [localComponents]);
 
   useEffect(() => {
     handleHiddenIdsChange();
   }, [hiddenIds]);
 
-  const handleHiddenIdsChange = () => {
+  const handleHiddenIdsChange = async (awaitUntilElementsAreRendered = false) => {
+    console.log('hiddenIds:', hiddenIds);
+    if (awaitUntilElementsAreRendered) await new Promise((resolve) => setTimeout(resolve, 100));
     if (!hiddenIds) return;
     const allNodes = document.getElementsByClassName('draggable-layout-droppable');
     if (!allNodes) return;

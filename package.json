@@ -1,11 +1,12 @@
 {
   "name": "react-draggable-layout-2",
-  "version": "1.0.4",
+  "version": "1.0.8",
   "description": "a draggable React.js layout",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
   "scripts": {
+    "build-and-publish": "microbundle-crl --no-compress --format modern,cjs && npm publish",
     "build": "microbundle-crl --no-compress --format modern,cjs",
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "start-storybook -p 6006",
