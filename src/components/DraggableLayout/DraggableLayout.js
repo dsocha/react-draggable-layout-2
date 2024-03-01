@@ -148,7 +148,9 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
 
   const getComponentsForColumn = (col) => {
     const result = [];
-    const c = defaultComponents.filter((c) => c.col.toString() === col.toString());
+
+    const c = col === columns - 1 ? defaultComponents.filter((c) => parseInt(c.col) >= parseInt(col)) : defaultComponents.filter((c) => c.col.toString() === col.toString());
+
     for (let i = 0; i < c.length; i++) {
       const id = c[i].id ?? self.crypto.randomUUID();
       result.push(
@@ -157,6 +159,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
         </Draggable>
       );
     }
+
     return result;
   };
 
