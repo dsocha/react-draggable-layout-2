@@ -46,12 +46,24 @@ const Styles = styled.div`
       display: flex;
       flex-direction: column;
     }
+
+    div.draggable-layout-last-element {
+      flex: auto;
+      width: 100%;
+      height: 5px;
+    }
   }
 
   @media screen and (min-width: 1024px) {
     div.draggable-layout-container {
       display: flex;
       flex-direction: row;
+    }
+
+    div.draggable-layout-last-element {
+      flex: auto;
+      width: 100%;
+      height: 100px;
     }
   }
 `;

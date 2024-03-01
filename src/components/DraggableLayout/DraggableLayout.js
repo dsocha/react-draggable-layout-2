@@ -110,7 +110,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     // </create placeholder element>
   };
 
-  const getLastElementInColumn = () => <div className='draggable-layout-droppable draggable-layout-last-element' style={{ flex: 'auto', height: '100px', width: '100%' }}></div>;
+  const getLastElementInColumn = () => <div className='draggable-layout-droppable draggable-layout-last-element'></div>;
 
   const handleOnDragEnd = async (e) => {
     // <move dragging element and remove placeholder>
