@@ -30,7 +30,7 @@ Primary.args = {
       col: 0,
       id: 'Component 1',
       component: (
-        <div style={{ height: '120px', backgroundColor: 'rgb(125 211 252)', padding: '24px', boxShadow: '0 8px 10px -4px #cccccc' }}>
+        <div style={{ height: '620px', backgroundColor: 'rgb(125 211 252)', padding: '24px', boxShadow: '0 8px 10px -4px #cccccc' }}>
           <div style={{ backgroundColor: 'green' }}>Component #1</div>
         </div>
       ),

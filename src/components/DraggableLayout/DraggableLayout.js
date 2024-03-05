@@ -25,32 +25,11 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     }
     setColumnsComponents(result);
     //setLocalComponents([...defaultComponents]);
-  }, [columns, mainColumnIndex, defaultComponents, draggable]);
+  }, [columns, mainColumnIndex, defaultComponents, draggable, hiddenIds]);
 
   useEffect(() => {
     if (onChange) onChange(localComponents);
-    handleHiddenIdsChange(true);
   }, [localComponents]);
-
-  useEffect(() => {
-    handleHiddenIdsChange();
-  }, [hiddenIds]);
-
-  const handleHiddenIdsChange = async (awaitUntilElementsAreRendered = false) => {
-    console.log('hiddenIds:', hiddenIds);
-    if (awaitUntilElementsAreRendered) await new Promise((resolve) => setTimeout(resolve, 100));
-    if (!hiddenIds) return;
-    const allNodes = document.getElementsByClassName('draggable-layout-droppable');
-    if (!allNodes) return;
-    for (let i = 0; i < allNodes.length; i++) {
-      const node = allNodes[i];
-      if (!node) continue;
-      if (node.classList.contains('draggable-layout-last-element')) continue;
-      const { id: componentId } = node;
-      if (!componentId) continue;
-      node.style.display = hiddenIds.includes(componentId) ? 'none' : null;
-    }
-  };
 
   const handleGlobalMouseMove = async (e) => {
     if (!draggingElement) return;
@@ -153,6 +132,10 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
 
     for (let i = 0; i < c.length; i++) {
       const id = c[i].id ?? self.crypto.randomUUID();
+      if (hiddenIds?.includes(id)) {
+        //console.log('skipping', id, 'because it is hidden');
+        continue;
+      }
       result.push(
         <Draggable key={id} id={id} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd} draggable={draggable}>
           {c[i].component}
