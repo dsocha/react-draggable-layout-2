@@ -132,13 +132,9 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
 
     for (let i = 0; i < c.length; i++) {
       const id = c[i].id ?? self.crypto.randomUUID();
-      if (hiddenIds?.includes(id)) {
-        //console.log('skipping', id, 'because it is hidden');
-        continue;
-      }
       result.push(
         <Draggable key={id} id={id} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd} draggable={draggable}>
-          {c[i].component}
+          {hiddenIds?.includes(id) || c[i].component}
         </Draggable>
       );
     }
