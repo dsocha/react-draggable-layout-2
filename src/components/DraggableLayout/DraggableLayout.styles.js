@@ -18,7 +18,6 @@ const Styles = styled.div`
     flex-direction: column;
     flex: 1;
     width: 100%;
-    gap: 12px;
     padding: 8px;
   }
 
@@ -27,8 +26,11 @@ const Styles = styled.div`
     flex-direction: column;
     flex: 2;
     width: 100%;
-    gap: 12px;
     padding: 8px;
+  }
+
+  div.draggable-layout-droppable-visible {
+    margin-bottom: 16px;
   }
 
   .draggable-layout-blinking {

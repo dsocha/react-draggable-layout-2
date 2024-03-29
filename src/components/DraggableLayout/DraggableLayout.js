@@ -133,8 +133,8 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     for (let i = 0; i < c.length; i++) {
       const id = c[i].id ?? self.crypto.randomUUID();
       result.push(
-        <Draggable key={id} id={id} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd} draggable={draggable}>
-          {hiddenIds?.includes(id) || c[i].component}
+        <Draggable key={id} id={id} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd} draggable={draggable} hidden={hiddenIds?.includes(id)}>
+          {c[i].component}
         </Draggable>
       );
     }

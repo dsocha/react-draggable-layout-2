@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Draggable = ({ id, children, onDragStart, onDragEnd, draggable }) => {
+const Draggable = ({ id, children, onDragStart, onDragEnd, draggable, hidden }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
@@ -71,8 +71,10 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, draggable }) => {
     setTop(movementY + clientY - calclulatedOffsetTop);
   };
 
+  if (hidden) return <div key={id} id={id} tabIndex={0} className='draggable-layout-droppable' />;
+
   return (
-    <div style={isDragging ? { zIndex: 99999, transform: 'scale(1.02)', opacity: 0.9, position: 'absolute', width: width, height: height, left: left, top: top } : null} key={id} id={id} tabIndex={0} className='draggable-layout-droppable' onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
+    <div style={isDragging ? { zIndex: 99999, transform: 'scale(1.02)', opacity: 0.9, position: 'absolute', width: width, height: height, left: left, top: top } : null} key={id} id={id} tabIndex={0} className='draggable-layout-droppable draggable-layout-droppable-visible' onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
       {children}
     </div>
   );
