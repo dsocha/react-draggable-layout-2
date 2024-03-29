@@ -80,6 +80,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     placeholder.id = 'draggable-layout-placeholder';
     placeholder.classList.add('draggable-layout-placeholder');
     placeholder.classList.add('draggable-layout-blinking');
+    placeholder.style.marginBottom = '16px';
     placeholder.style.position = 'relative';
     placeholder.style.width = '100%';
     placeholder.style.height = height;
