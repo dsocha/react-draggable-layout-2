@@ -75,7 +75,7 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, draggable, hidden }) 
 
   return (
     <div style={isDragging ? { zIndex: 99999, transform: 'scale(1.02)', opacity: 0.9, position: 'absolute', width: width, height: height, left: left, top: top } : null} key={id} id={id} tabIndex={0} className='draggable-layout-droppable draggable-layout-droppable-visible' onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
-      {children}
+      <div className={!isDragging && draggable && 'draggable-layout-swinging'}>{children}</div>
     </div>
   );
 };

@@ -43,6 +43,19 @@ const Styles = styled.div`
     }
   }
 
+  div.draggable-layout-swinging {
+    animation: draggable-layout-swinging-anim 0.5s linear infinite;
+  }
+
+  @keyframes draggable-layout-swinging-anim {
+    0% {
+      transform: rotate(-0.4deg);
+    }
+    50% {
+      transform: rotate(0.4deg);
+    }
+  }
+
   @media screen and (max-width: 1023px) {
     div.draggable-layout-container {
       display: flex;
