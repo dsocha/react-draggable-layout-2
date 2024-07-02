@@ -19,6 +19,8 @@ const Styles = styled.div`
     flex: 1;
     width: 100%;
     padding: 8px;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
   }
 
   div.draggable-layout-column-master {
