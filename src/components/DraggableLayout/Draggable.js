@@ -12,9 +12,12 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden }) => {
   const onMouseDown = (e) => {
     if (e.button !== 0) return;
 
-    // Prevent dragging when clicking on an input element
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
-      return;
+    let currentElement = e.target;
+    while (currentElement && currentElement !== e.currentTarget) {
+      if (currentElement.classList.contains('draggable-layout-exclude')) {
+        return;
+      }
+      currentElement = currentElement.parentElement;
     }
 
     const { clientX, clientY } = e;

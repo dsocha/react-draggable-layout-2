@@ -47,6 +47,8 @@ export default function App() {
 }
 ```
 
+To exclude controls from being draggable, you can set the className to `draggable-layout-exclude`.
+
 ## Properties
 
 - **defaultComponents**
