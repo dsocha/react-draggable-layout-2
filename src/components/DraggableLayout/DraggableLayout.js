@@ -2,17 +2,15 @@ import Styles from './DraggableLayout.styles';
 import React, { useEffect, useState } from 'react';
 import Draggable from './Draggable';
 
-const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMode, onChange, hiddenIds = [], draggable }) => {
+const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMode, onChange, hiddenIds = [] }) => {
   const [columnsComponents, setColumnsComponents] = useState(null);
   const [draggingElement, setDraggingElement] = useState(false);
   const [localComponents, setLocalComponents] = useState(defaultComponents);
 
   useEffect(() => {
-    window.ondragstart = draggable
-      ? function () {
-          return false;
-        }
-      : null;
+    window.ondragstart = function () {
+      return false;
+    };
     const result = [];
     for (let i = 0; i < columns; i++) {
       const id = `draggable-layout-column-${i}`;
@@ -24,8 +22,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
       );
     }
     setColumnsComponents(result);
-    //setLocalComponents([...defaultComponents]);
-  }, [columns, mainColumnIndex, defaultComponents, draggable, hiddenIds]);
+  }, [columns, mainColumnIndex, defaultComponents, hiddenIds]);
 
   useEffect(() => {
     if (onChange) onChange(localComponents);
@@ -36,22 +33,17 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     const { clientX, clientY } = e;
     const elements = document.elementsFromPoint(clientX, clientY);
 
-    // <determine mouse over element>
     const mouseOverElement = elements.find((e) => e.classList.contains('draggable-layout-droppable') && e.id !== draggingElement.id);
     if (!mouseOverElement) return;
     const rect = mouseOverElement.getBoundingClientRect();
     const mouseOverBottomElement = clientY - rect.y > rect.height / 2;
-    // </determine mouse over element>
 
-    // <remove placeholder from old position>
     const placeholder = document.getElementById('draggable-layout-placeholder');
     if (placeholder) {
       const placeholderParent = placeholder.parentElement;
       if (placeholderParent) placeholderParent.removeChild(placeholder);
     }
-    // </remove placeholder from old position>
 
-    // <insert placeholder in a new position>
     const mouseOverElementParent = mouseOverElement.parentElement;
     const isLastElement = mouseOverElement.className?.includes('draggable-layout-last-element') ? true : false;
     const newPlaceholder = getPlaceHolder(draggingElement.height, draggingElement.borderRadius);
@@ -60,22 +52,19 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     } else {
       mouseOverElementParent.insertBefore(newPlaceholder, mouseOverElement);
     }
-    // </insert placeholder in a new position>
   };
 
   const handleOnDragStart = async (e) => {
-    dropOtphanedPlaceholders();
-    // <insert placeholder>
+    dropOrphanedPlaceholders();
+
     const element = document.getElementById(e.id);
     const elementParent = document.getElementById(e.id).parentElement;
     const placeholder = getPlaceHolder(e.height, e.borderRadius);
     elementParent.insertBefore(placeholder, element);
     setDraggingElement(e);
-    // </insert placeholder>
   };
 
   const getPlaceHolder = (height, borderRadius) => {
-    // <create placeholder element>
     let placeholder = document.createElement('div');
     placeholder.id = 'draggable-layout-placeholder';
     placeholder.classList.add('draggable-layout-placeholder');
@@ -87,27 +76,24 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     placeholder.style.borderRadius = borderRadius;
     placeholder.style.backgroundColor = isDarkMode ? '#ffffff44' : '#00000011';
     return placeholder;
-    // </create placeholder element>
   };
 
   const getLastElementInColumn = () => <div className='draggable-layout-droppable draggable-layout-last-element'></div>;
 
   const handleOnDragEnd = async (e) => {
-    // <move dragging element and remove placeholder>
     const placeholder = document.getElementById('draggable-layout-placeholder');
     if (!placeholder) return;
     const placeholderParent = placeholder.parentElement;
     if (!placeholderParent) return;
     placeholderParent.insertBefore(document.getElementById(e.id), placeholder);
     placeholderParent.removeChild(placeholder);
-    // </move dragging element and remove placeholder>
+
     setDraggingElement(null);
     updateLocalComponents();
-    dropOtphanedPlaceholders();
+    dropOrphanedPlaceholders();
   };
 
   const updateLocalComponents = () => {
-    // console.log('updateLocalComponents()');
     const result = [];
     const columnElements = document.getElementsByClassName('draggable-layout-column');
     for (let i = 0; i < columnElements.length; i++) {
@@ -128,13 +114,12 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
 
   const getComponentsForColumn = (col) => {
     const result = [];
-
     const c = col === columns - 1 ? defaultComponents.filter((c) => parseInt(c.col) >= parseInt(col)) : defaultComponents.filter((c) => c.col.toString() === col.toString());
 
     for (let i = 0; i < c.length; i++) {
       const id = c[i].id ?? self.crypto.randomUUID();
       result.push(
-        <Draggable key={id} id={id} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd} draggable={draggable} hidden={hiddenIds?.includes(id)}>
+        <Draggable key={id} id={id} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd} hidden={hiddenIds?.includes(id)}>
           {c[i].component}
         </Draggable>
       );
@@ -143,9 +128,9 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     return result;
   };
 
-  const dropOtphanedPlaceholders = () => {
+  const dropOrphanedPlaceholders = () => {
     const placeholders = document.getElementsByClassName('draggable-layout-placeholder');
-    for (let i = 0; i < placeholders.length; i++) {
+    for (let i = 0; placeholders.length > 0;) {
       const placeholder = placeholders[i];
       const placeholderParent = placeholder.parentElement;
       if (!placeholderParent) continue;

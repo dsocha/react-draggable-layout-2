@@ -24,7 +24,6 @@ Primary.args = {
   isDarkMode: false,
   columns: 3,
   mainColumnIndex: 1,
-  draggable: true,
   defaultComponents: [
     {
       col: 0,
@@ -42,6 +41,7 @@ Primary.args = {
       component: (
         <div style={{ height: '300px', backgroundColor: 'rgb(254 202 202)', borderRadius: '1rem', padding: '24px', boxShadow: '0 8px 10px -4px #cccccc' }}>
           <img src='https://cdn-icons-png.flaticon.com/512/13881/13881945.png' style={{ height: '160px' }} />
+          <textarea style={{ width: '100%', height: '100px', marginTop: '16px' }} />
         </div>
       ),
     },
