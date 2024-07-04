@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Draggable = ({ id, children, onDragStart, onDragEnd, hidden }) => {
+const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassList }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
@@ -13,10 +13,15 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden }) => {
     if (e.button !== 0) return;
 
     let currentElement = e.target;
+
     while (currentElement && currentElement !== e.currentTarget) {
-      if (currentElement.classList.contains('draggable-layout-exclude')) {
-        return;
-      }
+      // console.log('onMouseDown', currentElement.classList);
+
+      // <excludes>
+      if (currentElement.classList.contains('draggable-layout-exclude')) return;
+      if (Array.isArray(ignoredClassList) && ignoredClassList.some((c) => currentElement.classList.contains(c))) return;
+      // </excludes>
+
       currentElement = currentElement.parentElement;
     }
 
@@ -61,16 +66,7 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden }) => {
   if (hidden) return <div key={id} id={id} tabIndex={0} className='draggable-layout-droppable' />;
 
   return (
-    <div
-      style={isDragging ? { zIndex: 99999, transform: 'scale(1.02)', opacity: 0.9, position: 'absolute', width: width, height: height, left: left, top: top } : null}
-      key={id}
-      id={id}
-      tabIndex={0}
-      className='draggable-layout-droppable draggable-layout-droppable-visible'
-      onMouseDown={onMouseDown}
-      onMouseUp={onMouseUp}
-      onMouseMove={onMouseMove}
-    >
+    <div style={isDragging ? { zIndex: 99999, transform: 'scale(1.02)', opacity: 0.9, position: 'absolute', width: width, height: height, left: left, top: top } : null} key={id} id={id} tabIndex={0} className='draggable-layout-droppable draggable-layout-droppable-visible' onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseMove={onMouseMove}>
       <div>{children}</div>
     </div>
   );
