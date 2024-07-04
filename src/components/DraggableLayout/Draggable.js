@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassList }) => {
+const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassList, ignoredClassPrefixList }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
@@ -20,6 +20,7 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassL
       // <excludes>
       if (currentElement.classList.contains('draggable-layout-exclude')) return;
       if (Array.isArray(ignoredClassList) && ignoredClassList.some((c) => currentElement.classList.contains(c))) return;
+      if (Array.isArray(ignoredClassPrefixList) && ignoredClassPrefixList.some((c) => currentElement.classList.value.startsWith(c))) return;
       // </excludes>
 
       currentElement = currentElement.parentElement;

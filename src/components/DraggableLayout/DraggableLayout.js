@@ -2,7 +2,7 @@ import Styles from './DraggableLayout.styles';
 import React, { useEffect, useState } from 'react';
 import Draggable from './Draggable';
 
-const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMode, onChange, hiddenIds = [], ignoredClassList = [] }) => {
+const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMode, onChange, hiddenIds = [], ignoredClassList = [], ignoredClassPrefixList = [] }) => {
   const [columnsComponents, setColumnsComponents] = useState(null);
   const [draggingElement, setDraggingElement] = useState(false);
   const [localComponents, setLocalComponents] = useState(defaultComponents);
@@ -119,7 +119,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     for (let i = 0; i < c.length; i++) {
       const id = c[i].id ?? self.crypto.randomUUID();
       result.push(
-        <Draggable key={id} id={id} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd} hidden={hiddenIds?.includes(id)} ignoredClassList={ignoredClassList}>
+        <Draggable key={id} id={id} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd} hidden={hiddenIds?.includes(id)} ignoredClassList={ignoredClassList} ignoredClassPrefixList={ignoredClassPrefixList}>
           {c[i].component}
         </Draggable>
       );
