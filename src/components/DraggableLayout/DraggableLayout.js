@@ -2,7 +2,7 @@ import Styles from './DraggableLayout.styles';
 import React, { useEffect, useState } from 'react';
 import Draggable from './Draggable';
 
-const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMode, onChange, hiddenIds = [], ignoredClassList = [], ignoredClassPrefixList = [] }) => {
+const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMode, onChange, hiddenIds = [], ignoredClassList = [], ignoredClassPrefixList = [], enabled = true }) => {
   const [columnsComponents, setColumnsComponents] = useState(null);
   const [draggingElement, setDraggingElement] = useState(false);
   const [localComponents, setLocalComponents] = useState(defaultComponents);
@@ -22,13 +22,14 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
       );
     }
     setColumnsComponents(result);
-  }, [columns, mainColumnIndex, defaultComponents, hiddenIds]);
+  }, [columns, mainColumnIndex, defaultComponents, hiddenIds, enabled]);
 
   useEffect(() => {
     if (onChange) onChange(localComponents);
   }, [localComponents]);
 
   const handleGlobalMouseMove = async (e) => {
+    if (!enabled) return;
     if (!draggingElement) return;
     const { clientX, clientY } = e;
     const elements = document.elementsFromPoint(clientX, clientY);
@@ -55,6 +56,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
   };
 
   const handleOnDragStart = async (e) => {
+    if (!enabled) return;
     dropOrphanedPlaceholders();
 
     const element = document.getElementById(e.id);
@@ -62,6 +64,20 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     const placeholder = getPlaceHolder(e.height, e.borderRadius);
     elementParent.insertBefore(placeholder, element);
     setDraggingElement(e);
+  };
+
+  const handleOnDragEnd = async (e) => {
+    if (!enabled) return;
+    const placeholder = document.getElementById('draggable-layout-placeholder');
+    if (!placeholder) return;
+    const placeholderParent = placeholder.parentElement;
+    if (!placeholderParent) return;
+    placeholderParent.insertBefore(document.getElementById(e.id), placeholder);
+    placeholderParent.removeChild(placeholder);
+
+    setDraggingElement(null);
+    updateLocalComponents();
+    dropOrphanedPlaceholders();
   };
 
   const getPlaceHolder = (height, borderRadius) => {
@@ -79,19 +95,6 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
   };
 
   const getLastElementInColumn = () => <div className='draggable-layout-droppable draggable-layout-last-element'></div>;
-
-  const handleOnDragEnd = async (e) => {
-    const placeholder = document.getElementById('draggable-layout-placeholder');
-    if (!placeholder) return;
-    const placeholderParent = placeholder.parentElement;
-    if (!placeholderParent) return;
-    placeholderParent.insertBefore(document.getElementById(e.id), placeholder);
-    placeholderParent.removeChild(placeholder);
-
-    setDraggingElement(null);
-    updateLocalComponents();
-    dropOrphanedPlaceholders();
-  };
 
   const updateLocalComponents = () => {
     const result = [];
@@ -119,7 +122,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     for (let i = 0; i < c.length; i++) {
       const id = c[i].id ?? self.crypto.randomUUID();
       result.push(
-        <Draggable key={id} id={id} onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd} hidden={hiddenIds?.includes(id)} ignoredClassList={ignoredClassList} ignoredClassPrefixList={ignoredClassPrefixList}>
+        <Draggable key={id} id={id} onDragStart={enabled && handleOnDragStart} onDragEnd={enabled && handleOnDragEnd} hidden={hiddenIds?.includes(id)} ignoredClassList={ignoredClassList} ignoredClassPrefixList={ignoredClassPrefixList} enabled={enabled}>
           {c[i].component}
         </Draggable>
       );

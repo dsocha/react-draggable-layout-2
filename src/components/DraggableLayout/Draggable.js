@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassList, ignoredClassPrefixList }) => {
+const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassList, ignoredClassPrefixList, enabled }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
@@ -10,6 +10,7 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassL
   const [calculatedOffsetTop, setCalculatedOffsetTop] = useState(0);
 
   const onMouseDown = (e) => {
+    if (!enabled) return;
     if (e.button !== 0) return;
 
     let currentElement = e.target;
@@ -51,6 +52,7 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassL
   };
 
   const onMouseUp = (e) => {
+    if (!enabled) return;
     if (e.button !== 0) return;
     if (!isDragging) return;
     if (onDragEnd) onDragEnd({ id });
@@ -58,6 +60,7 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassL
   };
 
   const onMouseMove = (e) => {
+    if (!enabled) return;
     if (!isDragging) return;
     const { clientX, clientY, movementX, movementY } = e;
     setLeft(movementX + clientX - calculatedOffsetLeft);
@@ -67,7 +70,7 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassL
   if (hidden) return <div key={id} id={id} tabIndex={0} className='draggable-layout-droppable' />;
 
   return (
-    <div style={isDragging ? { zIndex: 99999, transform: 'scale(1.02)', opacity: 0.9, position: 'absolute', width: width, height: height, left: left, top: top } : null} key={id} id={id} tabIndex={0} className='draggable-layout-droppable draggable-layout-droppable-visible' onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseMove={onMouseMove}>
+    <div style={isDragging ? { zIndex: 99999, transform: 'scale(1.02)', opacity: 0.9, position: 'absolute', width: width, height: height, left: left, top: top } : null} key={id} id={id} tabIndex={0} className={`${enabled && 'draggable-layout-droppable'} draggable-layout-droppable-visible`} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseMove={onMouseMove}>
       <div>{children}</div>
     </div>
   );
