@@ -27,7 +27,10 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassL
       currentElement = currentElement.parentElement;
     }
 
-    const { clientX, clientY } = e;
+    const { clientX, clientY, pageX, pageY } = e;
+
+    // console.log('aaaa 1', clientX, clientY, pageY, screenY);
+
     const elements = document.elementsFromPoint(clientX, clientY);
     if (!elements) return;
     const element = elements.find((e) => e.id === id);
@@ -40,8 +43,8 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassL
     setHeight(offsetHeight);
     setWidth(offsetWidth);
 
-    const col = clientX - offsetLeft;
-    const cot = clientY - offsetTop;
+    const col = pageX - offsetLeft;
+    const cot = pageY - offsetTop;
     setCalculatedOffsetLeft(col);
     setCalculatedOffsetTop(cot);
     setLeft(clientX - col);
