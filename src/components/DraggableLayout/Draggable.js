@@ -43,12 +43,19 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassL
     setHeight(offsetHeight);
     setWidth(offsetWidth);
 
+    let scrollTop = 0;
+    const root = document.getElementById('layout-root-container');
+    if (root?.scrollTop) scrollTop = root.scrollTop;
+
     const col = pageX - offsetLeft;
-    const cot = pageY - offsetTop;
+    const cot = pageY - offsetTop + scrollTop;
+
     setCalculatedOffsetLeft(col);
     setCalculatedOffsetTop(cot);
-    setLeft(clientX - col);
-    setTop(clientY - cot);
+    setLeft(pageX - col);
+    setTop(pageY - cot);
+
+    //console.log('aaaa', { pageY, clientY, offsetTop, cot, scrollTop });
 
     if (onDragStart) onDragStart({ id, height: `${offsetHeight}px`, width: `${offsetWidth}px`, borderRadius });
     setIsDragging(true);
