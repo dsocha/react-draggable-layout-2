@@ -2,7 +2,7 @@ import Styles from './DraggableLayout.styles';
 import React, { useEffect, useState } from 'react';
 import Draggable from './Draggable';
 
-const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMode, onChange, hiddenIds = [], ignoredClassList = [], ignoredClassPrefixList = [], enabled = true }) => {
+const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMode, onChange, hiddenIds = [], ignoredClassList = [], ignoredClassPrefixList = [], enabled = true, rootComponentId = null, extraOffsetX = 0 }) => {
   const [columnsComponents, setColumnsComponents] = useState(null);
   const [draggingElement, setDraggingElement] = useState(false);
   const [localComponents, setLocalComponents] = useState(defaultComponents);
@@ -122,7 +122,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     for (let i = 0; i < c.length; i++) {
       const id = c[i].id ?? self.crypto.randomUUID();
       result.push(
-        <Draggable key={id} id={id} onDragStart={enabled && handleOnDragStart} onDragEnd={enabled && handleOnDragEnd} hidden={hiddenIds?.includes(id)} ignoredClassList={ignoredClassList} ignoredClassPrefixList={ignoredClassPrefixList} enabled={enabled}>
+        <Draggable key={id} id={id} onDragStart={enabled && handleOnDragStart} onDragEnd={enabled && handleOnDragEnd} hidden={hiddenIds?.includes(id)} ignoredClassList={ignoredClassList} ignoredClassPrefixList={ignoredClassPrefixList} enabled={enabled} rootComponentId={rootComponentId} extraOffsetX={extraOffsetX}>
           {c[i].component}
         </Draggable>
       );

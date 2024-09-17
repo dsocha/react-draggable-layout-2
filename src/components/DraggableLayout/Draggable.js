@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassList, ignoredClassPrefixList, enabled }) => {
+const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassList, ignoredClassPrefixList, enabled, rootComponentId, extraOffsetX }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
@@ -44,18 +44,20 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassL
     setWidth(offsetWidth);
 
     let scrollTop = 0;
-    const root = document.getElementById('layout-root-container');
-    if (root?.scrollTop) scrollTop = root.scrollTop;
+    if (rootComponentId) {
+      const root = document.getElementById(rootComponentId);
+      if (root?.scrollTop) scrollTop = root.scrollTop;
+    }
 
-    const col = pageX - offsetLeft;
+    const col = pageX - offsetLeft - extraOffsetX;
     const cot = pageY - offsetTop + scrollTop;
+
+    //console.log('aaaa 2', col, pageX, offsetLeft, extraOffsetX);
 
     setCalculatedOffsetLeft(col);
     setCalculatedOffsetTop(cot);
     setLeft(pageX - col);
     setTop(pageY - cot);
-
-    //console.log('aaaa', { pageY, clientY, offsetTop, cot, scrollTop });
 
     if (onDragStart) onDragStart({ id, height: `${offsetHeight}px`, width: `${offsetWidth}px`, borderRadius });
     setIsDragging(true);

@@ -12,7 +12,7 @@ export default {
 
 //👇 We create a “template” of how args map to rendering
 const Template = (args) => (
-  <div style={{ width: '100%', minHeight: '100vh', backgroundColor: args.isDarkMode ? '#000000' : '#ffffff' }}>
+  <div id='test-root-container' style={{ width: '100%', height: '100%', overflow: 'auto', backgroundColor: args.isDarkMode ? '#000000' : '#ffffff' }}>
     <DraggableLayout {...args} />
   </div>
 );
@@ -20,6 +20,7 @@ const Template = (args) => (
 export const Primary = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
+  rootComponentId: 'test-root-container',
   enabled: true,
   hiddenIds: ['Component 2'],
   isDarkMode: false,
