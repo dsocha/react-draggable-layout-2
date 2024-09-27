@@ -79,10 +79,17 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassL
     setTop(movementY + clientY - calculatedOffsetTop);
   };
 
-  if (hidden) return <div key={id} id={id} tabIndex={0} className='draggable-layout-droppable' />;
+  const onMouseLeave = (e) => {
+    if (!enabled) return;
+    if (!isDragging) return;
+    if (onDragEnd) onDragEnd({ id });
+    setIsDragging(false);
+  };
+
+  if (hidden) return <div key={id} id={id} tabIndex={0} className={enabled ? 'draggable-layout-droppable' : null} />;
 
   return (
-    <div style={isDragging ? { zIndex: 99999, transform: 'scale(1.02)', opacity: 0.9, position: 'fixed', width: width, height: height, left: left, top: top } : null} key={id} id={id} tabIndex={0} className={`${enabled && 'draggable-layout-droppable'} draggable-layout-droppable-visible`} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseMove={onMouseMove}>
+    <div style={isDragging ? { zIndex: 99999, transform: 'scale(1.02)', opacity: 0.9, position: 'fixed', width: width, height: height, left: left, top: top } : null} key={id} id={id} tabIndex={0} className={`${enabled ? 'draggable-layout-droppable' : null} draggable-layout-droppable-visible`} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
       <div>{children}</div>
     </div>
   );

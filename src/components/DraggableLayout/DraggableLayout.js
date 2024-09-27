@@ -17,7 +17,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
       result.push(
         <div id={id} key={id} className={i.toString() === mainColumnIndex?.toString() ? 'draggable-layout-column-master draggable-layout-column' : 'draggable-layout-column-regular draggable-layout-column'}>
           {getComponentsForColumn(i)}
-          {getLastElementInColumn()}
+          {enabled && getLastElementInColumn()}
         </div>
       );
     }
@@ -80,6 +80,10 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     dropOrphanedPlaceholders();
   };
 
+  const handleOnDragBreak = async (e) => {
+    console.log('handleOnDragBreak', e);
+  };
+
   const getPlaceHolder = (height, borderRadius) => {
     let placeholder = document.createElement('div');
     placeholder.id = 'draggable-layout-placeholder';
@@ -122,7 +126,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
     for (let i = 0; i < c.length; i++) {
       const id = c[i].id ?? self.crypto.randomUUID();
       result.push(
-        <Draggable key={id} id={id} onDragStart={enabled && handleOnDragStart} onDragEnd={enabled && handleOnDragEnd} hidden={hiddenIds?.includes(id)} ignoredClassList={ignoredClassList} ignoredClassPrefixList={ignoredClassPrefixList} enabled={enabled} rootComponentId={rootComponentId} extraOffsetX={extraOffsetX}>
+        <Draggable key={id} id={id} onDragStart={enabled ? handleOnDragStart : null} onDragEnd={enabled ? handleOnDragEnd : null} onDragBreak={enabled ? handleOnDragBreak : null} hidden={hiddenIds?.includes(id)} ignoredClassList={ignoredClassList} ignoredClassPrefixList={ignoredClassPrefixList} enabled={enabled} rootComponentId={rootComponentId} extraOffsetX={extraOffsetX}>
           {c[i].component}
         </Draggable>
       );
