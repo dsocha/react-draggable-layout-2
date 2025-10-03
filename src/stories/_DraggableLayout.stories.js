@@ -13,7 +13,7 @@ export default {
 //👇 We create a “template” of how args map to rendering
 const Template = (args) => (
   <div id='test-root-container' style={{ width: '100%', height: '100%', overflow: 'auto', backgroundColor: args.isDarkMode ? '#000000' : '#ffffff' }}>
-    <DraggableLayout {...args} />
+    <DraggableLayout {...args} rootComponentId='test-root-container' />
   </div>
 );
 

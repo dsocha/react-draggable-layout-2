@@ -37,29 +37,26 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassL
     if (!element) return;
     const targetComponentElement = element.children[0];
 
-    const { offsetHeight, offsetWidth, offsetLeft, offsetTop } = targetComponentElement;
+    // Use getBoundingClientRect to get viewport-relative position
+    const rect = targetComponentElement.getBoundingClientRect();
     const { borderRadius } = window.getComputedStyle(targetComponentElement);
 
-    setHeight(offsetHeight);
-    setWidth(offsetWidth);
+    setHeight(rect.height);
+    setWidth(rect.width);
 
-    let scrollTop = 0;
-    if (rootComponentId) {
-      const root = document.getElementById(rootComponentId);
-      if (root?.scrollTop) scrollTop = root.scrollTop;
-    }
+    // Calculate the offset between mouse position and element's top-left corner
+    // Using clientX/clientY and rect (both viewport-relative) for consistency with position:fixed
+    const offsetX = clientX - rect.left - extraOffsetX;
+    const offsetY = clientY - rect.top;
 
-    const col = pageX - offsetLeft - extraOffsetX;
-    const cot = pageY - offsetTop + scrollTop;
+    console.log('Mouse click offset:', { offsetX, offsetY, rectTop: rect.top, rectLeft: rect.left, clientX, clientY });
 
-    //console.log('aaaa 2', col, pageX, offsetLeft, extraOffsetX);
+    setCalculatedOffsetLeft(offsetX);
+    setCalculatedOffsetTop(offsetY);
+    setLeft(clientX - offsetX);
+    setTop(clientY - offsetY);
 
-    setCalculatedOffsetLeft(col);
-    setCalculatedOffsetTop(cot);
-    setLeft(pageX - col);
-    setTop(pageY - cot);
-
-    if (onDragStart) onDragStart({ id, height: `${offsetHeight}px`, width: `${offsetWidth}px`, borderRadius });
+    if (onDragStart) onDragStart({ id, height: `${rect.height}px`, width: `${rect.width}px`, borderRadius });
     setIsDragging(true);
   };
 
@@ -74,9 +71,10 @@ const Draggable = ({ id, children, onDragStart, onDragEnd, hidden, ignoredClassL
   const onMouseMove = (e) => {
     if (!enabled) return;
     if (!isDragging) return;
-    const { clientX, clientY, movementX, movementY } = e;
-    setLeft(movementX + clientX - calculatedOffsetLeft);
-    setTop(movementY + clientY - calculatedOffsetTop);
+    const { clientX, clientY } = e;
+    // Use clientX/clientY directly since position:fixed is viewport-relative
+    setLeft(clientX - calculatedOffsetLeft);
+    setTop(clientY - calculatedOffsetTop);
   };
 
   const onMouseLeave = (e) => {
