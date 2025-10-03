@@ -1,11 +1,64 @@
 import Styles from './DraggableLayout.styles';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import Draggable from './Draggable';
 
 const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMode, onChange, hiddenIds = [], ignoredClassList = [], ignoredClassPrefixList = [], enabled = true, rootComponentId = null, extraOffsetX = 0 }) => {
   const [columnsComponents, setColumnsComponents] = useState(null);
   const [draggingElement, setDraggingElement] = useState(false);
   const [localComponents, setLocalComponents] = useState(defaultComponents);
+  const rafIdRef = useRef(null);
+
+  // Use useCallback to memoize the handler
+  const handleGlobalMouseMove = useCallback(
+    (e) => {
+      if (!enabled) return;
+      if (!draggingElement) return;
+
+      // Use requestAnimationFrame for better performance
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+
+      rafIdRef.current = requestAnimationFrame(() => {
+        const { clientX, clientY } = e;
+        const elements = document.elementsFromPoint(clientX, clientY);
+
+        const mouseOverElement = elements.find((e) => e.classList.contains('draggable-layout-droppable') && e.id !== draggingElement.id);
+        if (!mouseOverElement) return;
+        const rect = mouseOverElement.getBoundingClientRect();
+        const mouseOverBottomElement = clientY - rect.y > rect.height / 2;
+
+        const placeholder = document.getElementById('draggable-layout-placeholder');
+        if (placeholder) {
+          const placeholderParent = placeholder.parentElement;
+          if (placeholderParent) placeholderParent.removeChild(placeholder);
+        }
+
+        const mouseOverElementParent = mouseOverElement.parentElement;
+        const isLastElement = mouseOverElement.className?.includes('draggable-layout-last-element') ? true : false;
+        const newPlaceholder = getPlaceHolder(draggingElement.height, draggingElement.borderRadius);
+        if (!isLastElement && mouseOverBottomElement) {
+          mouseOverElementParent.insertBefore(newPlaceholder, mouseOverElement.nextSibling);
+        } else {
+          mouseOverElementParent.insertBefore(newPlaceholder, mouseOverElement);
+        }
+      });
+    },
+    [enabled, draggingElement, isDarkMode]
+  );
+
+  // Attach/detach document-level mouse move listener when dragging starts/stops
+  useEffect(() => {
+    if (draggingElement && enabled) {
+      document.addEventListener('mousemove', handleGlobalMouseMove, { passive: true });
+      return () => {
+        document.removeEventListener('mousemove', handleGlobalMouseMove);
+        if (rafIdRef.current) {
+          cancelAnimationFrame(rafIdRef.current);
+        }
+      };
+    }
+  }, [draggingElement, enabled, handleGlobalMouseMove]);
 
   useEffect(() => {
     window.ondragstart = function () {
@@ -27,33 +80,6 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
   useEffect(() => {
     if (onChange) onChange(localComponents);
   }, [localComponents]);
-
-  const handleGlobalMouseMove = async (e) => {
-    if (!enabled) return;
-    if (!draggingElement) return;
-    const { clientX, clientY } = e;
-    const elements = document.elementsFromPoint(clientX, clientY);
-
-    const mouseOverElement = elements.find((e) => e.classList.contains('draggable-layout-droppable') && e.id !== draggingElement.id);
-    if (!mouseOverElement) return;
-    const rect = mouseOverElement.getBoundingClientRect();
-    const mouseOverBottomElement = clientY - rect.y > rect.height / 2;
-
-    const placeholder = document.getElementById('draggable-layout-placeholder');
-    if (placeholder) {
-      const placeholderParent = placeholder.parentElement;
-      if (placeholderParent) placeholderParent.removeChild(placeholder);
-    }
-
-    const mouseOverElementParent = mouseOverElement.parentElement;
-    const isLastElement = mouseOverElement.className?.includes('draggable-layout-last-element') ? true : false;
-    const newPlaceholder = getPlaceHolder(draggingElement.height, draggingElement.borderRadius);
-    if (!isLastElement && mouseOverBottomElement) {
-      mouseOverElementParent.insertBefore(newPlaceholder, mouseOverElement.nextSibling);
-    } else {
-      mouseOverElementParent.insertBefore(newPlaceholder, mouseOverElement);
-    }
-  };
 
   const handleOnDragStart = async (e) => {
     if (!enabled) return;
@@ -147,7 +173,7 @@ const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMo
 
   return (
     <Styles>
-      <div id='draggable-layout-container' className='draggable-layout-container' onMouseMove={handleGlobalMouseMove}>
+      <div id='draggable-layout-container' className='draggable-layout-container'>
         {columnsComponents}
       </div>
     </Styles>
