@@ -1,6 +1,6 @@
 {
   "name": "react-draggable-layout-2",
-  "version": "1.0.38",
+  "version": "1.0.39",
   "description": "a draggable React.js layout",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",

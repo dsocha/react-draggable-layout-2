@@ -1,5 +1,5 @@
 import Styles from './DraggableLayout.styles';
-import { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Draggable from './Draggable';
 
 const DraggableLayout = ({ defaultComponents, columns, mainColumnIndex, isDarkMode, onChange, hiddenIds = [], ignoredClassList = [], ignoredClassPrefixList = [], enabled = true, rootComponentId = null, extraOffsetX = 0 }) => {
